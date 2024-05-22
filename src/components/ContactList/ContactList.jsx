@@ -1,33 +1,26 @@
-import Contact from "../Contact/Contact.jsx";
-import css from "./ContactList.module.css";
-import { selectContacts } from "../../redux/contactsSlice.js";
-import { selectNameFilter } from "../../redux/filtersSlice.js";
+import Contact from "../Contact/Contact";
 import { useSelector } from "react-redux";
+import { selectContacts } from "../../redux/contactsSlice";
+import { selectNameFilter } from "../../redux/filtersSlice";
+
+import css from "./ContactList.module.css";
 
 const ContactList = () => {
   const contacts = useSelector(selectContacts);
-  const filters = useSelector(selectNameFilter);
-  console.log(filters);
+  const value = useSelector(selectNameFilter);
 
-  const filteredContacts = contacts.filter((contact) => {
-    console.log(contact);
-    return (
-      contact.name.toLowerCase().includes(filters.toLowerCase()) ||
-      contact.number.includes(filters)
-    );
-  });
+  const visibleContact = contacts.filter((cont) =>
+    cont.name.toLowerCase().includes(value.toLowerCase())
+  );
 
   return (
-    <ul className={css.contacts}>
-      {filteredContacts.map((item) => {
-        return (
-          <li key={item.id}>
-            <Contact baseState={item} />
-          </li>
-        );
-      })}
+    <ul className={css.listBox}>
+      {visibleContact.map((element) => (
+        <li className={css.list} key={element.id}>
+          <Contact data={element} />
+        </li>
+      ))}
     </ul>
   );
 };
-
 export default ContactList;

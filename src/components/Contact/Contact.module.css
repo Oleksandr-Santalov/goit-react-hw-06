@@ -1,28 +1,16 @@
-.item {
-  margin-top: 10px;
-  padding: 10px;
-
-  border: 1px solid black;
+.container {
   display: flex;
-  flex-direction: column;
+  text-align: left;
 }
 
-.name {
-  padding: 0;
+.btn {
+  height: 37px;
   display: flex;
-  flex-direction: row;
   align-items: center;
+  justify-content: center;
+  margin: auto 0 auto auto;
 }
 
-.number {
-  padding: 0;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.delete-btn {
-  padding: 0;
-  width: 80px;
-  height: 40px;
+.phoneIcon {
+  margin-right: 10px;
 }

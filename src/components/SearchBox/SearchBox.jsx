@@ -1,30 +1,23 @@
-import { useId } from "react";
-
-import { changeFilter, selectNameFilter } from "../../redux/filtersSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { changeFilter } from "../../redux/filtersSlice";
+import { selectNameFilter } from "../../redux/filtersSlice";
+
 import css from "./SearchBox.module.css";
 
 const SearchBox = () => {
-  const state = useSelector(selectNameFilter);
   const dispatch = useDispatch();
-  const searchBoxId = useId();
+  const value = useSelector(selectNameFilter);
 
   return (
-    <div className={css.searching}>
-      <label htmlFor={searchBoxId}>
-        Find contacts by name
-        <input
-          className={css.input}
-          value={state}
-          onChange={(event) => {
-            dispatch(changeFilter(event.target.value));
-          }}
-          type="text"
-          id={searchBoxId}
-        />
-      </label>
+    <div className={css.container}>
+      <p className={css.text}>Find contacts by name</p>
+      <input
+        className={css.input}
+        value={value}
+        onChange={(event) => dispatch(changeFilter(event.target.value))}
+        type="text"
+      />
     </div>
   );
 };
-
 export default SearchBox;

@@ -1,87 +1,80 @@
-import css from "./ContactForm.module.css";
-import * as Yup from "yup";
+import { Formik, Form, Field } from "formik";
 import { useId } from "react";
-import { Form, Formik, Field, ErrorMessage } from "formik";
-import { nanoid } from "nanoid";
+import * as Yup from "yup";
+import { ErrorMessage } from "formik";
+
 import { useDispatch } from "react-redux";
 import { addContact } from "../../redux/contactsSlice";
-const initialValue = {
-  name: "",
-  number: "",
-};
+import css from "./ContactForm.module.css";
 
-const Validation = Yup.object().shape({
+const FeedbackSchema = Yup.object().shape({
   name: Yup.string()
-    .min(3, "Must be min 3 symbols")
-    .max(50, "Must be no more then 50 symbols")
-    .required("Required field"),
-  number: Yup.string()
-    .min(2, "Must be min 2 symbols")
-    .max(50, "Must be no more then 50 symbols")
-    .required("Required field"),
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
+  phone: Yup.string()
+    .min(3, "Too Short!")
+    .max(50, "Too Long!")
+    .required("Required"),
 });
 
 const ContactForm = () => {
-  const dispatch = useDispatch();
-  const nameId = useId();
-  const numberId = useId();
+  const nameFieldId = useId();
+  const numberFieldId = useId();
 
+  const dispatch = useDispatch();
+
+  const handleSubmit = (value, actions) => {
+    const objectValue = {
+      id: `id-${Date.now()}`,
+      name: value.name,
+      number: value.phone,
+    };
+    dispatch(addContact(objectValue));
+
+    localStorage.setItem("saved-clicks", JSON.stringify(objectValue));
+
+    actions.resetForm();
+  };
   return (
     <Formik
-      initialValues={initialValue}
-      validationSchema={Validation}
-      onSubmit={(values, actions) => {
-        const add = {
-          id: nanoid(),
-          ...values,
-        };
-
-        dispatch(addContact(add));
-        actions.resetForm();
-      }}
+      initialValues={{ name: "", phone: "" }}
+      onSubmit={handleSubmit}
+      validationSchema={FeedbackSchema}
     >
-      <Form className={css["contact-form"]}>
-        <label htmlFor={nameId}>Name</label>
-        <Field
-          className={css["contact-inputs"]}
-          type="text"
-          name="name"
-          id={nameId}
-        />
-        <ErrorMessage name="name" component="span" />
+      <Form className={css.form}>
+        <div className={css.formBox}>
+          <label className={css.label} htmlFor={nameFieldId}>
+            Name
+          </label>
+          <Field
+            className={css.input}
+            type="text"
+            name="name"
+            id={nameFieldId}
+          />
+          <ErrorMessage className={css.errMessage} name="name" as="span" />
+        </div>
 
-        <label htmlFor={numberId}>Number</label>
-        <Field
-          className={css["contact-inputs"]}
-          type="phone"
-          name="number"
-          id={numberId}
-        />
-        <ErrorMessage name="number" component="span" />
+        <div className={css.formBox}>
+          <label className={css.label} htmlFor={numberFieldId}>
+            Number
+          </label>
+          <Field
+            className={css.input}
+            type="phone"
+            name="phone"
+            id={numberFieldId}
+          />
+          <ErrorMessage className={css.errMessage} name="phone" as="span" />
+        </div>
 
-        <button className={css["add-btn"]} type="submit">
+        <button className={css.btn} type="submit">
           Add contact
         </button>
       </Form>
     </Formik>
   );
 };
-
-// const ContactForm = () => {
-
-//   return (
-//     <>
-//       <form className={css["contact-form"]}>
-//         <label htmlFor={nameId}>Name</label>
-//         <input className={css["contact-inputs"]} type="text" id={nameId} />
-//         <label htmlFor={numberId}>Number</label>
-//         <input className={css["contact-inputs"]} type="text" />
-//         <button className={css["add-btn"]} type="submit" id={numberId}>
-//           Add contact
-//         </button>
-//       </form>
-//     </>
-//   );
-// };
 
 export default ContactForm;

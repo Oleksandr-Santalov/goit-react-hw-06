@@ -1,10 +1,24 @@
-.searching label input {
-  display: flex;
-  flex-direction: column;
-  width: 350px;
-  height: 30px;
+.container {
+  margin-top: 20px;
 }
 
 .input {
-  margin-top: 10px;
+  background-color: aliceblue;
+  color: black;
+  padding: 5px;
+  font-weight: 500;
+  border-radius: 5px;
+  border: 1px solid rgba(6, 6, 6, 0.836);
+  outline: transparent;
+  transition: border-color 250ms linear;
+}
+
+.input:focus {
+  border-color: rgba(79, 79, 79, 0.9);
+  outline: transparent;
+  outline-offset: 4px;
+}
+
+.text {
+  font-weight: 500;
 }
